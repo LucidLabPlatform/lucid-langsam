@@ -2,7 +2,7 @@ FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
 
 WORKDIR /app
 RUN pip install --no-cache-dir \
-    lang-segment-anything \
+    "git+https://github.com/luca-medeiros/lang-segment-anything.git" \
     paho-mqtt \
     opencv-python-headless \
     Pillow \
