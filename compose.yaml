@@ -1,0 +1,32 @@
+name: lucid-langsam
+
+# Standalone GPU segmentation service. Runs independently of the main CC stack.
+# Start with:  docker compose up -d --build
+# Stop with:   docker compose down
+#
+# Connects to the EMQX broker on the host via network_mode:host, so
+# MQTT_HOST=localhost works regardless of which Docker network the broker uses.
+
+services:
+  lucid-langsam:
+    container_name: lucid-langsam
+    build: .
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      MQTT_HOST: ${MQTT_HOST:-localhost}
+      MQTT_PORT: ${MQTT_PORT:-1883}
+      MQTT_USERNAME: ${LANGSAM_MQTT_USERNAME}
+      MQTT_PASSWORD: ${LANGSAM_MQTT_PASSWORD}
+      LUCID_LANGSAM_AGENT_ID: langsam
+      LUCID_LOG_LEVEL: ${LUCID_LOG_LEVEL:-INFO}
+    env_file:
+      - path: .env
+        required: false
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

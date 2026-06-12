@@ -1,0 +1,5 @@
+lang-segment-anything
+paho-mqtt
+opencv-python-headless
+Pillow
+numpy
