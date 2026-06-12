@@ -1,4 +1,4 @@
-https://github.com/luca-medeiros/lang-segment-anything/archive/refs/heads/main.tar.gz
+git+https://github.com/luca-medeiros/lang-segment-anything.git
 paho-mqtt
 opencv-python-headless
 Pillow
