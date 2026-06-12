@@ -10,12 +10,12 @@ RUN pip install --no-cache-dir \
     Pillow \
     numpy
 
-# lang-segment-anything pulls in a newer torch (e.g. 2.12) but leaves the base
-# image's torchaudio (2.3) in place — libtorchaudio.so then fails to load with
-# an undefined-symbol error because its ABI doesn't match the upgraded torch.
-# Reinstall torchaudio pinned to whatever torch version actually got installed.
-RUN TORCH_VERSION=$(python -c "import torch; print(torch.__version__.split('+')[0])") && \
-    pip install --no-cache-dir --force-reinstall --no-deps "torchaudio==${TORCH_VERSION}"
+# lang-segment-anything's deps pull in torch 2.12 (bleeding edge — its matching
+# torchaudio hasn't shipped on PyPI yet) and leave the base image's torchaudio
+# 2.3 in place, so libtorchaudio.so fails to load with an undefined-symbol error.
+# Force-reinstall a known-matching torch+torchaudio pair (2.11.0 is the latest
+# torchaudio published on PyPI as of writing). Pip will downgrade torch to match.
+RUN pip install --no-cache-dir "torch==2.11.0" "torchaudio==2.11.0"
 
 COPY lucid_langsam_server.py .
 CMD ["python", "lucid_langsam_server.py"]
